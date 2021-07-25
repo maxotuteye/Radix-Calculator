@@ -20,7 +20,7 @@ private val DarkColorPalette = darkColors(
 
 private val LightColorPalette = lightColors(
 	primary = Color.fromHex("05dddd"),
-	primaryVariant = Color.fromHex("05ffff"),
+	primaryVariant = Color.fromHex("05ddff"),
 	secondary = Teal200,
 	background = Color.fromHex("000000"),
 	surface = Color.White,

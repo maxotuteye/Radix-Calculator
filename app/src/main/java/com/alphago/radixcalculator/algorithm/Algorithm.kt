@@ -1,3 +1,6 @@
+package com.alphago.radixcalculator.algorithm
+
+import Stack
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.pow
@@ -20,11 +23,11 @@ class Algorithm {
 			return startsWith('-')
 		}
 
-		private fun charToInt(char: Char): Int {
+		 fun charToInt(char: Char): Int {
 			return (char.code - 55)
 		}
 
-		private fun intToChar(int: Int): Char {
+		 fun intToChar(int: Int): Char {
 			return (int + 55).toChar()
 		}
 
@@ -78,7 +81,7 @@ class Algorithm {
 			return output
 		}
 
-		private fun convertToBase10(value: String, oldBase: Int): String {
+		 fun convertToBase10(value: String, oldBase: Int): String {
 			val characteristic = value.split('.')[0].uppercase()
 			val mantissa = value.split('.')[1].uppercase()
 
