@@ -1,32 +1,25 @@
 package com.alphago.radixcalculator
 
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alphago.radixcalculator.algorithm.Algorithm
 import com.alphago.radixcalculator.ui.theme.RadixCalculatorTheme
-import org.intellij.lang.annotations.JdkConstants
 import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
@@ -35,7 +28,7 @@ class MainActivity : ComponentActivity() {
 	private var selectedBase = mutableStateOf(10)
 	private var output = mutableStateOf("0.0")
 	private var input = mutableStateOf("")
-	private var nBase = 2
+	private var nBase = 10
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -102,6 +95,9 @@ class MainActivity : ComponentActivity() {
 									value = input.value,
 									onValueChange = {
 										//TODO: add code for handling new input and checking validity
+										if (selectedBase.value > nBase) nBase = selectedBase.value
+										nBase = if (input.value.isNotEmpty()) nBase else 10
+
 										if (it.length <= 45 && !isNumberInvalid(it)) {
 											input.value = it
 											it.forEach { c ->
@@ -109,10 +105,11 @@ class MainActivity : ComponentActivity() {
 													if (c.toString().toInt() + 1 > nBase)
 														nBase = c.toString().toInt() + 1
 												} else
-													if (Algorithm.charToInt(c) + 1 > nBase
+													if (Algorithm.charToInt(c.uppercaseChar()) + 1 > nBase
 														&& c != '-' && c != '.'
 													)
-														nBase = Algorithm.charToInt(c) + 1
+														nBase =
+															Algorithm.charToInt(c.uppercaseChar()) + 1
 											}
 
 											selectedBase.value = nBase

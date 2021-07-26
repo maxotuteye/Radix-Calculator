@@ -1,13 +1,13 @@
 class Stack {
-	private val elements: MutableList<Int> = mutableListOf()
+	private val elements: MutableList<ULong> = mutableListOf()
 
 	fun isEmpty() = elements.isEmpty()
 
 	fun size() = elements.size
 
-	fun push(item: Int) = elements.add(item)
+	fun push(item: ULong) = elements.add(item)
 
-	fun pop(): Int? {
+	fun pop(): ULong? {
 		val item = elements.lastOrNull()
 		if (!isEmpty()) {
 			elements.removeAt(elements.size - 1)
@@ -15,7 +15,7 @@ class Stack {
 		return item
 	}
 
-	fun peek(): Int? = elements.lastOrNull()
+	fun peek(): ULong? = elements.lastOrNull()
 
 	override fun toString(): String = elements.toString()
 }

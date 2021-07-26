@@ -1,6 +1,7 @@
 package com.alphago.radixcalculator.algorithm
 
 import Stack
+import java.lang.Exception
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.pow
@@ -8,26 +9,36 @@ import kotlin.math.pow
 class Algorithm {
 	companion object {
 		fun calculate(value: String, oldBase: Int, newBase: Int): String {
-			var output: String
-			val newVal = convertToBase10(validateInput(value.uppercase()), oldBase).split('.')
-			val characteristic = newVal[0].toInt()
+			var output = ""
+			var temp = validateInput(value.uppercase())
+			if (temp.isNegative()) {
+				output = "-"
+				temp = temp.removePrefix("-")
+			}
+			val newVal = convertToBase10(temp, oldBase).split('.')
+			val characteristic = newVal[0].toULong()
 			val mantissa = "0.${newVal[1]}".toDouble()
-			output =
-				"${convertCharacteristic(characteristic, newBase)}.${convertMantissa(mantissa, newBase)}"
-
-
+			output +=
+				validateInput(
+					"${convertCharacteristic(characteristic, newBase)}.${
+						convertMantissa(
+							mantissa,
+							newBase
+						)
+					}"
+				)
 			return output
 		}
 
-		fun String.IsNegative(): Boolean {
+		private fun String.isNegative(): Boolean {
 			return startsWith('-')
 		}
 
-		 fun charToInt(char: Char): Int {
+		fun charToInt(char: Char): Int {
 			return (char.code - 55)
 		}
 
-		 fun intToChar(int: Int): Char {
+		fun intToChar(int: Int): Char {
 			return (int + 55).toChar()
 		}
 
@@ -36,14 +47,14 @@ class Algorithm {
 			val remainderStack = Stack()
 			var v = value
 
-			while (v > 0.0f && remainderStack.size() < 6) {
-				remainderStack.push((v * newBase).toInt())
+			while (v > 0.0f && remainderStack.size() < 20) {
+				remainderStack.push((v * newBase).toULong())
 				v = ((v * newBase).toInt() - (v * newBase)).absoluteValue
 			}
 
 			while (!remainderStack.isEmpty()) {
-				if (remainderStack.peek()!! > 9) {
-					val numToChar: Char = intToChar(remainderStack.pop()!!)
+				if (remainderStack.peek()!! > 9u) {
+					val numToChar: Char = intToChar(remainderStack.pop()!!.toInt())
 					output += numToChar
 				} else {
 					output += remainderStack.pop()
@@ -53,25 +64,25 @@ class Algorithm {
 			return output.reversed()
 		}
 
-		private fun convertCharacteristic(value: Int, newBase: Int): String {
+		private fun convertCharacteristic(value: ULong, newBase: Int): String {
 			var output = ""
 			val remainderStack = Stack()
 			var v = value
 
-			if (v == newBase) {
+			if (v.equals(newBase)) {
 				return "10"
 			}
 
-			while (v >= newBase) {
-				remainderStack.push(v % newBase)
-				v /= newBase
+			while (v >= newBase.toULong()) {
+				remainderStack.push(v % newBase.toULong())
+				v /= newBase.toULong()
 			}
 			remainderStack.push(v)
 
 
 			while (!remainderStack.isEmpty()) {
-				if (remainderStack.peek()!! > 9) {
-					val numToChar: Char = intToChar(remainderStack.pop()!!)
+				if (remainderStack.peek()!! > 9u) {
+					val numToChar: Char = intToChar(remainderStack.pop()!!.toInt())
 					output += numToChar
 				} else {
 					output += remainderStack.pop()
@@ -81,49 +92,50 @@ class Algorithm {
 			return output
 		}
 
-		 fun convertToBase10(value: String, oldBase: Int): String {
+		fun convertToBase10(value: String, oldBase: Int): String {
 			val characteristic = value.split('.')[0].uppercase()
 			val mantissa = value.split('.')[1].uppercase()
 
-			var base10whole: Long = 0
+			var base10whole: ULong = 0u
 			var base10frac = 0.0
 
-			val wholeNum = ArrayList<Char>()
-			val fracNum = ArrayList<Char>()
-
-			for (char in characteristic)
-			//if (char.isDigit())
-				wholeNum.add(char)
-			//	else wholeNum.add(charToInt(char).toChar())
-
-
-			for (char in mantissa)
-			//if (char.isDigit())
-				fracNum.add(char)
-			//	else fracNum.add(charToInt(char).toChar())
-
-			for (char in wholeNum) {
-				base10whole = if (char.isDigit())
-					(oldBase * base10whole) + char.toString().toInt()
-				else (oldBase * base10whole) + charToInt(char)
+			for (char in characteristic) {
+				base10whole = try {
+					if (char.isDigit())
+						(oldBase.toULong() * base10whole) + char.toString().toULong()
+					else (oldBase.toULong() * base10whole) + charToInt(char).toULong()
+				} catch (e: Exception) {
+					ULong.MAX_VALUE
+				}
 			}
 
-			for (i in 0 until fracNum.size) {
-				base10frac += if (fracNum[i].isDigit())
-					(fracNum[i].toString().toDouble() *
-							oldBase.toDouble().pow(-abs(i + 1).toDouble()))
-				else (charToInt(fracNum[i]).toString().toDouble() *
-						oldBase.toDouble().pow(-abs(i + 1).toDouble()))
+			for (i in mantissa.indices) {
+				base10frac += try {
+					if (mantissa[i].isDigit())
+						(mantissa[i].toString().toDouble() *
+								oldBase.toDouble().pow(-abs(i + 1).toDouble())).toLong()
+					else (charToInt(mantissa[i]).toString().toDouble() *
+							oldBase.toDouble().pow(-abs(i + 1).toDouble())).toLong()
+				} catch (e: Exception) {
+					0
+				}
 			}
-			println("$base10frac, ${(base10whole.toDouble() + base10frac)}")
-			println("${(base10whole.toDouble() + base10frac)}")
-			return "${(base10whole.toDouble() + base10frac)}"
+			return validateInput("${(base10whole.toDouble() + base10frac)}")
 
 		}
 
 		private fun validateInput(value: String): String {
-			return if (value.contains('.')) value
-			else "$value.0"
+			return if (value.contains('.')) {
+				if (!value.contains('+')) {
+					if (value.split('.')[1].isNotEmpty()) {
+						value
+					} else "${value}0"
+				} else ULong.MAX_VALUE.toString()
+			} else {
+				if (value.contains('+')) {
+					ULong.MAX_VALUE.toString() + ".0"
+				} else "$value.0"
+			}
 		}
 	}
 
