@@ -108,7 +108,7 @@ class Algorithm {
 					ULong.MAX_VALUE
 				}
 			}
-			Log.e("ccx", "b10whole is $base10whole")
+			Log.e("ccx", "b10whole is ${base10whole}")
 
 			for (i in mantissa.indices) {
 				base10frac +=
@@ -121,12 +121,11 @@ class Algorithm {
 					}
 
 			}
-			println(validateInput("${(base10whole.toDouble() + base10frac)}"))
-			return validateInput("${(base10whole.toDouble() + base10frac)}")
+			Log.e("ccx",validateInput("HEY! ${(base10whole + base10frac.toUInt())}"))
+			return validateInput("${(base10whole + base10frac.toUInt())}")
 		}
 
 		private fun validateInput(value: String): String {
-
 			return if (value.contains('.')) {
 				if (!value.contains('+')) {
 					if (value.split('.')[1].isNotEmpty()) {
@@ -138,8 +137,6 @@ class Algorithm {
 					Long.MAX_VALUE.toString() + ".0"
 				} else "$value.0"
 			}
-
-
 		}
 	}
 

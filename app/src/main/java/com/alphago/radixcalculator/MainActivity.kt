@@ -74,14 +74,15 @@ class MainActivity : ComponentActivity() {
 							shape = RoundedCornerShape(8),
 							modifier = Modifier
 								.fillMaxWidth(0.85f)
-								.fillMaxHeight(0.2f)
+								.wrapContentHeight()
 								.align(Alignment.CenterHorizontally)
 								.padding(0.dp, 0.dp, 0.dp, 0.dp),
 							backgroundColor = MaterialTheme.colors.background
 						) {
 							Column(
 								modifier = Modifier
-									.fillMaxSize(),
+									.fillMaxWidth()
+									.wrapContentHeight(),
 								verticalArrangement = Arrangement.Center
 							) {
 								Text(
@@ -89,7 +90,7 @@ class MainActivity : ComponentActivity() {
 									fontSize = 50.sp,
 									modifier = Modifier
 										.align(Alignment.CenterHorizontally)
-										.padding(10.dp, 0.dp, 10.dp, 0.dp),
+										.padding(10.dp, 10.dp, 10.dp, 10.dp),
 									color = MaterialTheme.colors.primary,
 									textAlign = TextAlign.Center
 								)
