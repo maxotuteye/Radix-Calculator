@@ -8,27 +8,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-	primary = Color.fromHex("aaaaaa"),
-	primaryVariant = Color.fromHex("2f3545"),
-	secondary = Color.fromHex("15496d"),
+	primary = Color.fromHex("05dddd"),
+	primaryVariant = Color.fromHex("05ddff"),
+	secondary = Color.Black,
 	background = Color.fromHex("000000"),
-	surface = Color.fromHex("f9f9fa"),
-	onPrimary = Color.White,
+	surface = Color.White,
+	onPrimary = Color.Black,
 	onSecondary = Color.Black,
-	onBackground = Color.Black
+	onBackground = Color.White,
+	onSurface = Color.fromHex("888888"),
 )
 
 private val LightColorPalette = lightColors(
-	primary = Color.fromHex("05dddd"),
-	primaryVariant = Color.fromHex("05ddff"),
-	secondary = Teal200,
-	background = Color.fromHex("000000"),
+	primary = Color.fromHex("8817ab"),
+	primaryVariant = Color.fromHex("67069a"),
+	secondary = Color.Black,
+	background = Color.fromHex("ffffff"),
 	surface = Color.White,
-	onPrimary = Color.White,
+	onPrimary = Color.Black,
 	onSecondary = Color.Black,
 	onBackground = Color.Black,
-	onSurface = Color.fromHex("888888"),
-
+	onSurface = Color.fromHex("333333"),
 	)
 
 @Composable

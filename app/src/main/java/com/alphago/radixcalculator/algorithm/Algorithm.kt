@@ -1,6 +1,6 @@
 package com.alphago.radixcalculator.algorithm
 
-import Stack
+import android.util.Log
 import java.lang.Exception
 import kotlin.math.abs
 import kotlin.math.absoluteValue
@@ -15,7 +15,7 @@ class Algorithm {
 				output = "-"
 				temp = temp.removePrefix("-")
 			}
-			val newVal = convertToBase10(temp, oldBase).split('.')
+			val newVal = validateInput(convertToBase10(temp, oldBase)).split('.')
 			val characteristic = newVal[0].toULong()
 			val mantissa = "0.${newVal[1]}".toDouble()
 			output +=
@@ -79,7 +79,6 @@ class Algorithm {
 			}
 			remainderStack.push(v)
 
-
 			while (!remainderStack.isEmpty()) {
 				if (remainderStack.peek()!! > 9u) {
 					val numToChar: Char = intToChar(remainderStack.pop()!!.toInt())
@@ -89,15 +88,16 @@ class Algorithm {
 				}
 			}
 
+			Log.e("ccx", "output is $output, length is ${output.length}")
 			return output
 		}
 
-		fun convertToBase10(value: String, oldBase: Int): String {
+		private fun convertToBase10(value: String, oldBase: Int): String {
 			val characteristic = value.split('.')[0].uppercase()
 			val mantissa = value.split('.')[1].uppercase()
 
 			var base10whole: ULong = 0u
-			var base10frac = 0.0
+			var base10frac = 0f
 
 			for (char in characteristic) {
 				base10whole = try {
@@ -108,34 +108,38 @@ class Algorithm {
 					ULong.MAX_VALUE
 				}
 			}
+			Log.e("ccx", "b10whole is $base10whole")
 
 			for (i in mantissa.indices) {
-				base10frac += try {
-					if (mantissa[i].isDigit())
+				base10frac +=
+					if (mantissa[i].isDigit()) {
 						(mantissa[i].toString().toDouble() *
-								oldBase.toDouble().pow(-abs(i + 1).toDouble())).toLong()
-					else (charToInt(mantissa[i]).toString().toDouble() *
-							oldBase.toDouble().pow(-abs(i + 1).toDouble())).toLong()
-				} catch (e: Exception) {
-					0
-				}
-			}
-			return validateInput("${(base10whole.toDouble() + base10frac)}")
+								oldBase.toDouble().pow(-abs(i + 1).toDouble())).toFloat()
+					} else {
+						(charToInt(mantissa[i]).toString().toDouble() *
+								oldBase.toDouble().pow(-abs(i + 1).toDouble())).toFloat()
+					}
 
+			}
+			println(validateInput("${(base10whole.toDouble() + base10frac)}"))
+			return validateInput("${(base10whole.toDouble() + base10frac)}")
 		}
 
 		private fun validateInput(value: String): String {
+
 			return if (value.contains('.')) {
 				if (!value.contains('+')) {
 					if (value.split('.')[1].isNotEmpty()) {
 						value
 					} else "${value}0"
-				} else ULong.MAX_VALUE.toString()
+				} else Long.MAX_VALUE.toString()
 			} else {
 				if (value.contains('+')) {
-					ULong.MAX_VALUE.toString() + ".0"
+					Long.MAX_VALUE.toString() + ".0"
 				} else "$value.0"
 			}
+
+
 		}
 	}
 
