@@ -1,5 +1,6 @@
 package com.alphago.radixcalculator
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
 		setContent {
 			RadixCalculatorTheme {
 				window.statusBarColor = MaterialTheme.colors.primary.toArgb()
-				window.navigationBarColor = MaterialTheme.colors.primaryVariant.toArgb()
+				window.navigationBarColor = Color.BLACK
 				Surface(
 					modifier = Modifier.background(
 						Brush.radialGradient(
@@ -53,12 +54,7 @@ class MainActivity : ComponentActivity() {
 					Column(
 						modifier = Modifier
 							.background(
-								Brush.verticalGradient(
-									colors = listOf(
-										MaterialTheme.colors.primary,
-										MaterialTheme.colors.primaryVariant
-									)
-								)
+								MaterialTheme.colors.primary
 							)
 							.fillMaxHeight()
 							.fillMaxWidth()
@@ -152,9 +148,13 @@ class MainActivity : ComponentActivity() {
 										color = MaterialTheme.colors.background,
 										fontSize = 35.sp
 									),
-									label = { Text("Enter Value",
-									fontSize = 20.sp,
-									color = MaterialTheme.colors.background) }
+									label = {
+										Text(
+											"Enter Value",
+											fontSize = 20.sp,
+											color = MaterialTheme.colors.background
+										)
+									}
 								)
 							}
 
@@ -264,7 +264,7 @@ fun isNumberInvalid(text: String): Boolean {
 
 fun correctBases(s: String, sliderValue: Int) {
 	//if (sliderValue > nBase) nBase = sliderValue
-	nBase = if (input.value.isNotEmpty()) nBase else 2
+	nBase = /*if (input.value.isNotEmpty()) nBase else*/ 2
 
 	if (s.length <= 45 && !isNumberInvalid(s)) {
 		input.value = s

@@ -119,7 +119,6 @@ class Algorithm {
 						(charToInt(mantissa[i]).toString().toDouble() *
 								oldBase.toDouble().pow(-abs(i + 1).toDouble())).toFloat()
 					}
-
 			}
 			Log.e("ccx",validateInput("HEY! ${(base10whole + base10frac.toUInt())}"))
 			return validateInput("${(base10whole + base10frac.toUInt())}")
@@ -131,10 +130,10 @@ class Algorithm {
 					if (value.split('.')[1].isNotEmpty()) {
 						value
 					} else "${value}0"
-				} else Long.MAX_VALUE.toString()
+				} else ULong.MAX_VALUE.toString()
 			} else {
 				if (value.contains('+')) {
-					Long.MAX_VALUE.toString() + ".0"
+					ULong.MAX_VALUE.toString() + ".0"
 				} else "$value.0"
 			}
 		}
