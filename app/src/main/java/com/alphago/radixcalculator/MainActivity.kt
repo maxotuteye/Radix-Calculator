@@ -5,16 +5,20 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -31,6 +35,7 @@ private var selectedBase = mutableStateOf(10)
 private var output = mutableStateOf("0.0")
 private var input = mutableStateOf("")
 private var nBase = 10
+private var isDark = mutableStateOf(false)
 
 class MainActivity : ComponentActivity() {
 
@@ -38,7 +43,7 @@ class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContent {
-			RadixCalculatorTheme {
+			RadixCalculatorTheme(isDark.value) {
 				window.statusBarColor = MaterialTheme.colors.primary.toArgb()
 				window.navigationBarColor = Color.BLACK
 				Surface(
@@ -59,13 +64,40 @@ class MainActivity : ComponentActivity() {
 							.fillMaxHeight()
 							.fillMaxWidth()
 					) {
-						Text(
-							"Radix Calculator", modifier = Modifier
-								.align(Alignment.CenterHorizontally)
-								.padding(0.dp, 0.dp, 0.dp, 30.dp),
-							fontSize = 40.sp,
-							color = MaterialTheme.colors.surface
-						)
+						Row(modifier = Modifier.fillMaxWidth(), Arrangement.Center) {
+							Text("", modifier = Modifier.weight(1f))
+							Text(
+								"Radix Calculator", modifier = Modifier
+									//.align(Alignment.CenterHorizontally)
+									.padding(0.dp, 0.dp, 0.dp, 30.dp)
+									.weight(3f),
+								fontSize = 40.sp,
+								color = MaterialTheme.colors.surface,
+								textAlign = TextAlign.Center
+							)
+							IconToggleButton(
+								checked = isDark.value, onCheckedChange = {
+									isDark.value = it
+								}, modifier = Modifier
+									.weight(1f)
+									.padding(0.dp, 0.dp, 30.dp, 30.dp)
+									.background(
+										MaterialTheme.colors.primary,
+										shape = RoundedCornerShape(50)
+									),
+								content = {
+									Image(
+										painter = painterResource(
+											if (isDark.value)
+												R.drawable.ic_baseline_wb_sunny_24
+											else R.drawable.ic_dark_mode_black_24dp
+										),
+										contentDescription = "light",
+										modifier = Modifier.fillMaxSize(0.7f)
+									)
+								}
+							)
+						}
 						Card(
 							shape = RoundedCornerShape(8),
 							modifier = Modifier

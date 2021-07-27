@@ -33,7 +33,7 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun RadixCalculatorTheme(
-	darkTheme: Boolean = isSystemInDarkTheme(),
+	darkTheme: Boolean,
 	content: @Composable () -> Unit
 ) {
 	val colors = if (darkTheme) {
